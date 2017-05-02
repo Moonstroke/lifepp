@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 			int j(int_input("j = "));
 			b.toggle(i, j);
 		}
-		else b.step();
+		else b.nextgen();
 		cout << b;
 		action = tolower(char_input("Action? [S]tep /[t]oggle cell / [q]uit "));
 		cout << "action = " << action << endl;

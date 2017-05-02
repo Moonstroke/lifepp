@@ -1,6 +1,6 @@
 #include "board.h"
 
-Board::Board(int width, int height, char live, char dead) {
+Board::Board(int width, int height, char live, char dead, char wall) {
 	this->width = width;
 	this->height = height;
 	
@@ -18,6 +18,11 @@ Board::Board(int width, int height, char live, char dead) {
 
 Board::~Board() {
 	this->cells.clear();
+}
+
+void Board::dim(int &w, int &h) const {
+	w = this->width;
+	h = this->height;
 }
 
 bool Board::operator()(int i, int j) const {
@@ -56,7 +61,7 @@ bool Board::nextstate(int i, int j) {
 	//return (n > 1 && n < 4) || this->cells[j][i];
 }
 
-void Board::step() {
+void Board::nextgen() {
 	std::vector<bool> row;
 	row.resize(this->width, false);
 	std::vector<std::vector<bool>> next;
@@ -71,10 +76,22 @@ void Board::step() {
 }
 
 std::ostream& operator<<(std::ostream& out, const Board& board) {
-	for(int j = 0; j < board.height; ++j) {
-		for(int i = 0; i < board.width; ++i)
+	for(int j(0); j < board.height; ++j) {
+		for(int i(0); i < board.width; ++i)
 			out << (board.cells[j][i] ? board.livechar : board.deadchar);
 		out << std::endl;
 	}
 	return out;
 }
+
+std::string Board::tostring() const {
+	std::string res("");
+	for(int j(0); j < this->height; ++j) {
+		for(int i(0); i < this->width; ++i)
+			res += (this->cells[j][i] ? this->livechar : this->deadchar);
+		res += '\n';
+	}
+	return res;
+}
+
+

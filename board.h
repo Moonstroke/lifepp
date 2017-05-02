@@ -11,22 +11,26 @@ private:
 	char livechar, deadchar, wallchar;
 
 public:
-	Board(int width, int height, char live, char dead, char wall);
+	Board(int, int, char, char, char);
 	
 	~Board();
 	
-	bool operator()(int i, int j) const;
+	void dim(int&, int&) const;
 	
-	int neighbors(int i, int j) const;
+	bool operator()(int, int) const;
 	
-	void toggle(int i, int j);
+	int neighbors(int, int) const;
 	
-	bool nextstate(int i, int j);
+	void toggle(int, int);
 	
-	void step();
+	bool nextstate(int, int);
+	
+	void nextgen();
 	
 	friend std::ostream& operator<<(std::ostream&, const Board&);
 	
+	std::string tostring() const;
 };
+
 
 #endif
