@@ -85,12 +85,15 @@ std::ostream& operator<<(std::ostream& out, const Board& board) {
 }
 
 std::string Board::tostring() const {
-	std::string res("");
+	std::string res(this->width + 2, this->wallchar);
+	res += '\n';
 	for(int j(0); j < this->height; ++j) {
+		res += this->wallchar;
 		for(int i(0); i < this->width; ++i)
 			res += (this->cells[j][i] ? this->livechar : this->deadchar);
-		res += '\n';
+		res += {this->wallchar, '\n'};
 	}
+	res += std::string(this->width + 2, this->wallchar);
 	return res;
 }
 

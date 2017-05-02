@@ -1,7 +1,6 @@
 #include <ncurses.h>
 #include "board.h"
 
-
 void init_interface() {
 
 	initscr();                  // lancer curses
@@ -25,7 +24,7 @@ void end_interface() {
 int main(int argc, char* argv[]) {
 	
 	init_interface();
-	
+	bool quit = false;
 	/*
 	 * PARAMÈTRES DU PLATEAU
 	 */
@@ -44,10 +43,10 @@ int main(int argc, char* argv[]) {
 	b.toggle(7, 6);
 	
 	int ch;
-	do {
+	while(!quit) {
 		clear();
 		printw(b.tostring().c_str());
-		mvchgat(cursor_j, cursor_i, 1, A_REVERSE, 0, NULL);
+		mvchgat(cursor_j + 1, cursor_i + 1, 1, A_REVERSE, 0, NULL);
 		refresh();
 		ch = getch();
 		switch(ch) {
@@ -55,13 +54,13 @@ int main(int argc, char* argv[]) {
 				cursor_j = cursor_j > 0 ? cursor_j - 1 : h - 1;
 				break;
 			case KEY_DOWN:
-				cursor_j = cursor_j < h ? cursor_j + 1 : 0;
+				cursor_j = cursor_j < h - 1 ? cursor_j + 1 : 0;
 				break;
 			case KEY_LEFT:
 				cursor_i = cursor_i > 0 ? cursor_i - 1 : w - 1;
 				break;
 			case KEY_RIGHT:
-				cursor_i = cursor_i < w ? cursor_i + 1 : 0;
+				cursor_i = cursor_i < w - 1 ? cursor_i + 1 : 0;
 				break;
 			case (int)' ':      // espace = inverser la cellule sélectionnée
 				b.toggle(cursor_i, cursor_j);
@@ -71,9 +70,9 @@ int main(int argc, char* argv[]) {
 				break;
 			case (int)'q':      // q / Q = quitter
 			case (int)'Q':
-				ch = 3;         // façon un peu sale de quitter
+			case 3:             //Ctrl-C
+				quit = true;
 		}
-	} while(ch != 3);           // 3 == CTRL-C
-	
+	}
 	end_interface();
 }
