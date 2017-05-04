@@ -93,5 +93,3 @@ std::string Board::tostring() const {
 	}
 	return res;
 }
-
-

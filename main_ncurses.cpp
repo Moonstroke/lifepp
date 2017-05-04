@@ -4,11 +4,11 @@
 
 void init_interface() {
 
-	initscr();                  // lancer curses
-	cbreak();
-	raw();                      // pas de mise en cache par ligne ( => pas besoin de taper Entrée)
+	initscr();                  // lancer curses  (initialise LINES et COLS)
+	cbreak();                   // pas de mise en cache par ligne ( => pas besoin de taper Entrée)
+	raw();                      // idem
 	noecho();                   // on désactive l'affichage des entrées
-	keypad(stdscr, true);       // active les touches du clavier (Fonc, flèches...)
+	keypad(stdscr, TRUE);       // active les touches du clavier (Fonc, flèches...)
 	/*
 	start_color();              // on lance la fonctionnalité de gestion des couleurs
 	init_pair(1, COLOR_CYAN, COLOR_BLACK); // paire de couleurs (à approfondir)
@@ -20,18 +20,32 @@ void end_interface() {
 	
 }
 
+WINDOW* create_win(int height, int width, int startx, int starty) {
+	WINDOW *local_win;
+	local_win = newwin(height, width, starty, startx);
+	box(local_win, 0 , 0);		/* 0, 0 gives default characters 
+					 * for the vertical and horizontal
+					 * lines			*/
+	wrefresh(local_win);		/* Show that box 		*/
+
+	return local_win;
+}
+
 //void center_board(WINDOW* boardwin, int sel_x, int sel_y,
 
 int main(int argc, char* argv[]) {
 	
 	init_interface();
 	
+	
+	//WINDOW* boardwin
 	/*
 	 * PARAMÈTRES DU PLATEAU
 	 */
 	char live('@'), dead(' '), wall('#');
 	int w(15), h(11);
-	
+	printw("coin coin");
+	WINDOW* boardwin = create_win(h, w, (COLS - w) / 2, (LINES - h) / 2);
 	
 	Board b(w, h, live, dead, wall);
 	
@@ -46,9 +60,9 @@ int main(int argc, char* argv[]) {
 	int ch;
 	do {
 		clear();
-		printw(b.tostring().c_str());
-		mvchgat(cursor_j, cursor_i, 1, A_REVERSE, 0, NULL);
-		refresh();
+		//wprintw(boardwin, b.tostring().c_str());
+		//mvwchgat(boardwin, cursor_j, cursor_i, 1, A_REVERSE, 0, NULL);
+		//refresh();
 		ch = getch();
 		switch(ch) {
 			case KEY_UP:        // Flèches du clavier = déplacer la sélection de cellule
