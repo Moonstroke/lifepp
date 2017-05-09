@@ -12,7 +12,7 @@ private:
 	uint x, y;
 
 public:
-	Window(uint w, uint h, uint x, uint y, bool center = false);
+	Window(uint width, uint height, uint x, uint y, bool center = false);
 	
 	~Window();
 	
