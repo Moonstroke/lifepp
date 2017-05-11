@@ -1,22 +1,24 @@
 #ifndef WINDOW_INCLUDED
 #define WINDOW_INCLUDED
 
-#include <curses.h>
 #include <iostream>
-typedef uint unsigned int; // convenience for shorter type 
+
+typedef unsigned int uint; // convenience for shorter type 
 
 class Window {
 private:
 	
-	uint width, height;
+	uint w, h;
 	uint x, y;
+	WINDOW* win;
 
 public:
-	Window(uint width, uint height, uint x, uint y, bool center = false);
+	Window(uint, uint, uint, uint, bool);
 	
 	~Window();
 	
-	void pos(&x, &y);
+	void dim(uint&, uint&);
+	void pos(uint&, uint&);
 	
 	void refresh();
 	

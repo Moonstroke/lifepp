@@ -1,24 +1,24 @@
 #include <ncurses.h>
-#include "board.h"
+#include "window.h"
 
-Window(uint width, uint height, uint x, uint y, bool center = false) : w(width), h(height), x(x), y(y) {
+Window::Window(uint width, uint height, uint x, uint y, bool center = false) : w(width), h(height), x(x), y(y) {
 	
 }
 
-~Window() {
+Window::~Window() {
 	
 }
 
-void pos(&x, &y) {
-	x = this->x;
-	y = this->y;
+void Window::pos(uint& x, uint& y) {
+	x = x;
+	y = y;
 }
 
-void dim(&w,idth, &height) {
-	width = this->w;
-	height = this->h;
+void Window::dim(uint& width, uint& height) {
+	width = w;
+	height = h;
 }
 
-void refresh() {
-	wrefresh(this->win);
+void Window::refresh() {
+	wrefresh(win);
 }
