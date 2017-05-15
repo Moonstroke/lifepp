@@ -1,81 +1,6 @@
 #include <ncurses.h>
 #include "board.h"
-
-
-void init_interface();
-void end_interface();
-
-WINDOW* create_win(int height, int width, int startx, int starty, bool center = false, char hbord = 0, char vbord = 0) {
-	WINDOW* win;
-	int h(height + 2), w(width + 2), x, y;
-	if(center)
-		win = newwin(h, w, (starty - h) / 2, (startx - w) / 2);
-	else
-		win = newwin(h, w, starty, startx);
-	box(win, hbord, vbord);
-	
-	return win;
-}
-
-//void center_board(WINDOW* boardwin, int sel_x, int sel_y,
-
-int main(int argc, char* argv[]) {
-	
-	init_interface();
-	
-	/*
-	 * PARAMÈTRES DU PLATEAU
-	 */
-	char live('@'), dead(' '), wall('#');
-	int w(15), h(11);
-	
-	WINDOW* boardwin(create_win(h, w, COLS, LINES, true, '|', '-'));
-	
-	Board b(w, h, live, dead, wall);
-	
-	int cursor_i(0), cursor_j(0);
-	
-	b.toggle(7, 4);
-	b.toggle(6, 5);
-	b.toggle(7, 5);
-	b.toggle(8, 5);
-	b.toggle(7, 6);
-	
-	bool quit(false);
-	while(!quit) {
-		clear();
-		wprintw(boardwin, b.tostring().c_str());
-		mvwchgat(boardwin, cursor_j + 1, cursor_i + 1, 1, A_REVERSE, 0, NULL);
-		wrefresh(boardwin);
-		switch(wgetch(boardwin)) {
-			case KEY_UP:        // Flèches du clavier = déplacer le curseur
-				cursor_j = cursor_j > 0 ? cursor_j - 1 : h - 1;
-				break;
-			case KEY_DOWN:
-				cursor_j = cursor_j < h ? cursor_j + 1 : 0;
-				break;
-			case KEY_LEFT:
-				cursor_i = cursor_i > 0 ? cursor_i - 1 : w - 1;
-				break;
-			case KEY_RIGHT:
-				cursor_i = cursor_i < w ? cursor_i + 1 : 0;
-				break;
-			case (int)' ':      // espace = inverser la cellule sélectionnée
-				b.toggle(cursor_i, cursor_j);
-				break;
-			case (int)'\n':     // Entrée = génération suivante
-				b.nextgen();
-				break;
-			case (int)'q':      // q / Q / 3 == CTRL-C = quitter
-			case (int)'Q':
-			case 3:
-				quit = true;
-		}
-	}
-	
-	end_interface();
-}
-
+#include "window.h"
 
 void init_interface() {
 
@@ -90,7 +15,76 @@ void init_interface() {
 	*/
 }
 
-void end_interface() {
+void end_interface(Window* bwin, Board* b) {
 	endwin();                   // termine curses et nettoie la mémoire
-	
+	delete bwin;
+	delete b;
+}
+
+void init_board(Board* b) {
+	//dessine un + de taille 3x3 :
+	//  @
+	// @@@
+	//  @
+
+	b->toggle(7, 4);
+	b->toggle(6, 5);
+	b->toggle(7, 5);
+	b->toggle(8, 5);
+	b->toggle(7, 6);
+}
+
+bool handle_input(Window* bwin, Board* b, uint cursor_i, uint cursor_j, uint w, uint h){
+	clear();
+	bwin->printw(b->tostring());
+	//bwin->highlight(cursor_j + 1, cursor_i + 1, 1);
+	bwin->refresh();
+	switch(bwin->getch()) {
+		case KEY_UP:        // Flèches du clavier = déplacer le curseur
+			cursor_j = cursor_j > 0 ? cursor_j - 1 : bwin->h - 1;
+			break;
+		case KEY_DOWN:
+			cursor_j = cursor_j < h ? cursor_j + 1 : 0;
+			break;
+		case KEY_LEFT:
+			cursor_i = cursor_i > 0 ? cursor_i - 1 : w - 1;
+			break;
+		case KEY_RIGHT:
+			cursor_i = cursor_i < w ? cursor_i + 1 : 0;
+			break;
+		case (int)' ':      // espace = inverser la cellule sélectionnée
+			b->toggle(cursor_i, cursor_j);
+			break;
+		case (int)'\n':     // Entrée = génération suivante
+			b->nextgen();
+			break;
+		case (int)'q':      // q / Q / 3 == CTRL-C = quitter
+		case (int)'Q':
+		case 3:
+			return false;   // quitter
+	}
+	return true;            // continuer
+}
+
+int main(int argc, char* argv[]) {
+
+	init_interface();
+
+	/*
+	 * PARAMÈTRES DU PLATEAU
+	 */
+	char live('@'), dead(' '), wall('#');
+	uint w(15), h(11);
+
+	Window* bwin = new Window(h, w, COLS, LINES, true);
+	bwin->draw('|', '-');
+
+	Board* b = new Board(w, h, live, dead, wall);
+	init_board(b);
+
+	uint i(0), j(0);
+
+	while(handle_input(bwin, b, i, j, w, h)); // tout le boulot se passe là
+
+	end_interface(bwin, b);
 }
