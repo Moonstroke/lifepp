@@ -41,15 +41,14 @@ int main(int argc, char* argv[]) {
 	b.toggle(8, 5);
 	b.toggle(7, 6);
 	
-	int ch;
-	do {
+	bool quit(false);
+	while(!quit) {
 		clear();
 		wprintw(boardwin, b.tostring().c_str());
 		mvwchgat(boardwin, cursor_j + 1, cursor_i + 1, 1, A_REVERSE, 0, NULL);
 		wrefresh(boardwin);
-		ch = wgetch(boardwin);
-		switch(ch) {
-			case KEY_UP:        // Flèches du clavier = déplacer la sélection de cellule
+		switch(wgetch(boardwin)) {
+			case KEY_UP:        // Flèches du clavier = déplacer le curseur
 				cursor_j = cursor_j > 0 ? cursor_j - 1 : h - 1;
 				break;
 			case KEY_DOWN:
@@ -67,11 +66,12 @@ int main(int argc, char* argv[]) {
 			case (int)'\n':     // Entrée = génération suivante
 				b.nextgen();
 				break;
-			case (int)'q':      // q / Q = quitter
+			case (int)'q':      // q / Q / 3 == CTRL-C = quitter
 			case (int)'Q':
-				ch = 3;         // façon un peu sale de quitter
+			case 3:
+				quit = true;
 		}
-	} while(ch != 3);           // 3 == CTRL-C
+	}
 	
 	end_interface();
 }
