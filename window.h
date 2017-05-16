@@ -15,14 +15,14 @@ private:
 public:
 	uint w, h;
 
-	Window(uint, uint, uint, uint, bool);
+	Window(uint, uint, uint, uint, bool = false);
 
 	~Window();
 
 	void dim(uint&, uint&);
 	void pos(uint&, uint&);
 
-	void draw(char, char);
+	void draw(char = '\0', char = '\0');
 	void refresh();
 
 	void highlight(uint, uint, uint);

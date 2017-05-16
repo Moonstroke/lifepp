@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include "window.h"
 
-Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center = false) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y) {
+Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y) {
 	win = newwin(h, w, x, y);
 }
 
@@ -20,7 +20,7 @@ void Window::dim(uint& width, uint& height) {
 	height = h;
 }
 
-void Window::draw(char hbord = '\0', char vbord = '\0') {
+void Window::draw(char hbord, char vbord) {
 	box(this->win, hbord, vbord);
 }
 
@@ -41,5 +41,5 @@ void Window::printw(char str[]) {
 }
 
 void Window::printw(std::string str) {
-	this->printw(str.c_str());
+	wprintw(win, str.c_str());
 }

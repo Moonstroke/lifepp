@@ -36,6 +36,7 @@ void init_board(Board* b) {
 
 bool handle_input(Window* bwin, Board* b, uint cursor_i, uint cursor_j, uint w, uint h){
 	clear();
+	bwin->draw();
 	bwin->printw(b->tostring());
 	//bwin->highlight(cursor_j + 1, cursor_i + 1, 1);
 	bwin->refresh();
@@ -73,13 +74,13 @@ int main(int argc, char* argv[]) {
 	/*
 	 * PARAMÈTRES DU PLATEAU
 	 */
-	char live('@'), dead(' '), wall('#');
+	char livechar('@'), deadchar(' '), wallchar('#');
 	uint w(15), h(11);
 
-	Window* bwin = new Window(h, w, COLS, LINES, true);
+	Window* bwin = new Window(h, w, COLS, LINES);
 	bwin->draw('|', '-');
 
-	Board* b = new Board(w, h, live, dead, wall);
+	Board* b = new Board(w, h, livechar, deadchar, wallchar);
 	init_board(b);
 
 	uint i(0), j(0);

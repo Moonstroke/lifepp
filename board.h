@@ -7,8 +7,8 @@
 class Board {
 private:
 	std::vector<std::vector<bool>> cells;
-	int height, width;
-	char livechar, deadchar, wallchar;
+	int h, w;
+	char live, dead, wall;
 
 public:
 	Board(int, int, char, char, char);
@@ -23,7 +23,7 @@ public:
 
 	void toggle(int, int);
 
-	bool nextstate(int, int);
+	bool nextstate(int, int) const;
 
 	void nextgen();
 
