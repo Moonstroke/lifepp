@@ -35,9 +35,6 @@ void init_board(Board* b) {
 	b->toggle(7, 6);
 }
 
-bool handle_input(Window* bwin, Board* b, unsigned int& cursor_i, unsigned int& cursor_j, unsigned int w, unsigned int h){
-}
-
 int main(int argc, char* argv[]) {
 
 	init_interface();
@@ -45,7 +42,7 @@ int main(int argc, char* argv[]) {
 	/*
 	 * PARAMÈTRES DU PLATEAU
 	 */
-	char livechar('@'), deadchar(' '), wallchar('#');
+	char livechar('@'), deadchar('.'), wallchar('#');
 	unsigned int w(15), h(11);
 
 	Window* bwin = new Window(w, h, COLS, LINES, true, true);

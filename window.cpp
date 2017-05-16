@@ -9,6 +9,7 @@ Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool c
 }
 
 Window::~Window() {
+	wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '); // effacer la bordure de la fenêtre
 	win = nullptr;
 }
 
