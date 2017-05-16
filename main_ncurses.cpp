@@ -9,6 +9,7 @@ void init_interface() {
 	raw();                      // idem
 	noecho();                   // on désactive l'affichage des entrées
 	keypad(stdscr, TRUE);       // active les touches du clavier (Fonc, flèches...)
+	curs_set(0);
 	/*
 	start_color();              // on lance la fonctionnalité de gestion des couleurs
 	init_pair(1, COLOR_CYAN, COLOR_BLACK); // paire de couleurs (à approfondir)
@@ -34,37 +35,7 @@ void init_board(Board* b) {
 	b->toggle(7, 6);
 }
 
-bool handle_input(Window* bwin, Board* b, uint cursor_i, uint cursor_j, uint w, uint h){
-	clear();
-	bwin->draw();
-	bwin->printw(b->tostring());
-	//bwin->highlight(cursor_j + 1, cursor_i + 1, 1);
-	bwin->refresh();
-	switch(bwin->getch()) {
-		case KEY_UP:        // Flèches du clavier = déplacer le curseur
-			cursor_j = cursor_j > 0 ? cursor_j - 1 : bwin->h - 1;
-			break;
-		case KEY_DOWN:
-			cursor_j = cursor_j < h ? cursor_j + 1 : 0;
-			break;
-		case KEY_LEFT:
-			cursor_i = cursor_i > 0 ? cursor_i - 1 : w - 1;
-			break;
-		case KEY_RIGHT:
-			cursor_i = cursor_i < w ? cursor_i + 1 : 0;
-			break;
-		case (int)' ':      // espace = inverser la cellule sélectionnée
-			b->toggle(cursor_i, cursor_j);
-			break;
-		case (int)'\n':     // Entrée = génération suivante
-			b->nextgen();
-			break;
-		case (int)'q':      // q / Q / 3 == CTRL-C = quitter
-		case (int)'Q':
-		case 3:
-			return false;   // quitter
-	}
-	return true;            // continuer
+bool handle_input(Window* bwin, Board* b, unsigned int& cursor_i, unsigned int& cursor_j, unsigned int w, unsigned int h){
 }
 
 int main(int argc, char* argv[]) {
@@ -75,17 +46,53 @@ int main(int argc, char* argv[]) {
 	 * PARAMÈTRES DU PLATEAU
 	 */
 	char livechar('@'), deadchar(' '), wallchar('#');
-	uint w(15), h(11);
+	unsigned int w(15), h(11);
 
-	Window* bwin = new Window(h, w, COLS, LINES);
+	Window* bwin = new Window(w, h, COLS, LINES, true, true);
 	bwin->draw('|', '-');
 
 	Board* b = new Board(w, h, livechar, deadchar, wallchar);
 	init_board(b);
 
-	uint i(0), j(0);
+	unsigned int cursor_i(0), cursor_j(0);
 
-	while(handle_input(bwin, b, i, j, w, h)); // tout le boulot se passe là
+	bool quit(false);
+
+	while(!quit) { // tout le boulot se passe là
+		clear();
+		bwin->draw('|', '-');
+		bwin->printw(b->tostring());
+		bwin->highlight(cursor_i, cursor_j, 1);
+		bwin->refresh();
+		int ch(bwin->getch());
+		switch(ch) {
+			case KEY_UP:        // Flèches du clavier = déplacer le curseur
+				cursor_j = cursor_j > 0 ? cursor_j - 1 : bwin->h - 1;
+				break;
+			case KEY_DOWN:
+				cursor_j = cursor_j < bwin->h ? cursor_j + 1 : 0;
+				break;
+			case KEY_LEFT:
+				cursor_i = cursor_i > 0 ? cursor_i - 1 : bwin->w - 1;
+				break;
+			case KEY_RIGHT:
+				cursor_i = cursor_i < bwin->w ? cursor_i + 1 : 0;
+				break;
+			case (int)' ':      // espace = inverser la cellule sélectionnée
+				b->toggle(cursor_i, cursor_j);
+				break;
+			case (int)'\n':     // Entrée = génération suivante
+				b->nextgen();
+				break;
+			case (int)'q':      // q / Q / 3 == CTRL-C = quitter
+			case (int)'Q':
+			case 3:
+				quit = true;   // quitter
+		}
+		std::cerr << "input = " << (char)ch << std::endl;
+		std::cerr << "cursor position = (" << cursor_i << ", " << cursor_j << ')' << std::endl;
+
+	}
 
 	end_interface(bwin, b);
 }

@@ -1,8 +1,11 @@
 #include <ncurses.h>
 #include "window.h"
 
-Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y) {
+#define unsigned int uint;
+
+Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center, bool do_keypad) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y) {
 	win = newwin(h, w, x, y);
+	keypad(win, do_keypad);
 }
 
 Window::~Window() {
@@ -22,6 +25,7 @@ void Window::dim(uint& width, uint& height) {
 
 void Window::draw(char hbord, char vbord) {
 	box(this->win, hbord, vbord);
+	this->refresh();
 }
 
 void Window::refresh() {
@@ -29,7 +33,7 @@ void Window::refresh() {
 }
 
 void Window::highlight(uint i, uint j, uint len) {
-	mvwchgat(win, j, i, len, A_REVERSE, 0, NULL);
+	mvwchgat(win, j + 1, i + 1, len, A_REVERSE, 0, NULL);
 }
 
 int Window::getch() {

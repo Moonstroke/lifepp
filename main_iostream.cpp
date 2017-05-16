@@ -31,19 +31,19 @@ void getpos(string prompt, int& i, int &j) {
 }
 
 int main(int argc, char *argv[]) {
-	
+
 	char live('@'), dead(' '), wall('#');
-	
+
 	int w(15), h(11);
-	
-	
+
+
 	Board b(w, h, live, dead, wall);
 	b.toggle(7, 4);
 	b.toggle(6, 5);
 	b.toggle(7, 5);
 	b.toggle(8, 5);
 	b.toggle(7, 6);
-	
+
 	cout << b;
 	char action(tolower(char_input("Action? [S]tep /[t]oggle cell / [q]uit ")));
 	bool loop(true);

@@ -1,6 +1,8 @@
 #include "board.h"
 
-Board::Board(int width, int height, char livechar, char deadchar, char wallchar) : w(width), h(height), live(livechar), dead(deadchar), wall(wallchar) {
+#define unsigned int uint;
+
+Board::Board(uint width, uint height, char livechar, char deadchar, char wallchar) : w(width), h(height), live(livechar), dead(deadchar), wall(wallchar) {
 	// this->w = width;
 	// this->h = height;
 	//
@@ -20,19 +22,18 @@ Board::~Board() {
 	cells.clear();
 }
 
-void Board::dim(int &width, int &height) const {
+void Board::dim(uint &width, uint &height) const {
 	width = w;
 	height = h;
 }
 
-bool Board::operator()(int i, int j) const {
+bool Board::operator()(uint i, uint j) const {
 	return cells[j][i];
 }
 
-int Board::neighbors(int i, int j) const {
+int Board::neighbors(uint i, uint j) const {
 	int res = 0;
-	int h = this->h - 1;
-	int w = this->w - 1;
+	uint h(this->h - 1), w(this->w - 1);
 	if(i > 0 && j > 0 && (*this)(i - 1, j - 1)) res += 1;
 	if(         j > 0 && (*this)(i,     j - 1)) res += 1;
 	if(i < w && j > 0 && (*this)(i + 1, j - 1)) res += 1;
@@ -44,13 +45,13 @@ int Board::neighbors(int i, int j) const {
 	return res;
 }
 
-void Board::toggle(int i, int j) {
+void Board::toggle(uint i, uint j) {
 	cells[j][i] = !(*this)(i, j);
 }
 
-bool Board::nextstate(int i, int j) const {
-	int n = neighbors(i, j);
-	int born(3), surv(2);
+bool Board::nextstate(uint i, uint j) const {
+	uint n = neighbors(i, j);
+	uint born(3), surv(2);
 	//bool res = this->cells[j][i];
 	//if(n < 2)
 	//	res = false;
@@ -67,8 +68,8 @@ void Board::nextgen() {
 	std::vector<std::vector<bool>> next;
 	next.resize(this->h, row);
 
-	for(int i = 0; i < this->w; ++i) {
-		for(int j = 0; j < this->h; ++j) {
+	for(uint i = 0; i < this->w; ++i) {
+		for(uint j = 0; j < this->h; ++j) {
 			next[j][i] = nextstate(i, j);
 		}
 	}
@@ -76,8 +77,8 @@ void Board::nextgen() {
 }
 
 std::ostream& operator<<(std::ostream& out, const Board& b) {
-	for(int j(0); j < b.h; ++j) {
-		for(int i(0); i < b.w; ++i)
+	for(uint j(0); j < b.h; ++j) {
+		for(uint i(0); i < b.w; ++i)
 			out << (b.cells[j][i] ? b.live : b.dead);
 		out << std::endl;
 	}
@@ -88,9 +89,9 @@ std::string Board::tostring() const {
 	std::string res;
 	// std::string res(width + 2, wallchar);
 	// res += '\n';
-	for(int j(0); j < h; ++j) {
+	for(uint j(0); j < h; ++j) {
 		// res += wallchar;
-		for(int i(0); i < w; ++i)
+		for(uint i(0); i < w; ++i)
 			res += (cells[j][i] ? live : dead);
 		// res += wallchar;
 		res += '\n';

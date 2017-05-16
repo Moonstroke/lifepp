@@ -7,23 +7,23 @@
 class Board {
 private:
 	std::vector<std::vector<bool>> cells;
-	int h, w;
+	unsigned int h, w;
 	char live, dead, wall;
 
 public:
-	Board(int, int, char, char, char);
+	Board(unsigned int, unsigned int, char, char, char);
 
 	~Board();
 
-	void dim(int&, int&) const;
+	void dim(unsigned int&, unsigned int&) const;
 
-	bool operator()(int, int) const;
+	bool operator()(unsigned int, unsigned int) const;
 
-	int neighbors(int, int) const;
+	int neighbors(unsigned int, unsigned int) const;
 
-	void toggle(int, int);
+	void toggle(unsigned int, unsigned int);
 
-	bool nextstate(int, int) const;
+	bool nextstate(unsigned int, unsigned int) const;
 
 	void nextgen();
 

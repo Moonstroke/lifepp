@@ -4,28 +4,26 @@
 #undef getch //tu soules !!
 #include <iostream>
 
-typedef unsigned int uint; // convenience for shorter type
-
 class Window {
 private:
 
-	uint x, y;
+	unsigned int x, y;
 	WINDOW* win;
 
 public:
-	uint w, h;
+	unsigned int w, h;
 
-	Window(uint, uint, uint, uint, bool = false);
+	Window(unsigned int, unsigned int, unsigned int, unsigned int, bool = false, bool = false);
 
 	~Window();
 
-	void dim(uint&, uint&);
-	void pos(uint&, uint&);
+	void dim(unsigned int&, unsigned int&);
+	void pos(unsigned int&, unsigned int&);
 
 	void draw(char = '\0', char = '\0');
 	void refresh();
 
-	void highlight(uint, uint, uint);
+	void highlight(unsigned int, unsigned int, unsigned int);
 
 	int getch();
 
