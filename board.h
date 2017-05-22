@@ -15,9 +15,11 @@ public:
 
 	~Board();
 
-	void dim(unsigned int&, unsigned int&) const;
+	void get_dim(unsigned int&, unsigned int&) const;
 
 	bool operator()(unsigned int, unsigned int) const;
+
+	char at(uint i, uint j) const;
 
 	int neighbors(unsigned int, unsigned int) const;
 

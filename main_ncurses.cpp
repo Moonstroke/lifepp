@@ -35,7 +35,15 @@ void init_board(Board* b) {
 	b->toggle(7, 6);
 }
 
-int main(int argc, char* argv[]) {
+void printw_board(Window *win, Board *brd) {
+	unsigned int w, h;
+	brd->get_dim(w, h);
+	for(int j(0); j < h; ++j)
+		for(int i(0); i < w; ++i)
+			win->mvaddch(i + 1, j + 1, brd->at(i, j));
+}
+
+int main(int argc, char *argv[]) {
 
 	init_interface();
 
@@ -58,7 +66,7 @@ int main(int argc, char* argv[]) {
 	while(!quit) { // tout le boulot se passe là
 		clear();
 		bwin->draw('|', '-');
-		bwin->printw(b->tostring());
+		printw_board(bwin, b);
 		bwin->highlight(cursor_i, cursor_j, 1);
 		bwin->refresh();
 		int ch(bwin->getch());
@@ -86,9 +94,6 @@ int main(int argc, char* argv[]) {
 			case 3:
 				quit = true;   // quitter
 		}
-		std::cerr << "input = " << (char)ch << std::endl;
-		std::cerr << "cursor position = (" << cursor_i << ", " << cursor_j << ')' << std::endl;
-
 	}
 
 	end_interface(bwin, b);

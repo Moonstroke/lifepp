@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include "window.h"
 
-#define unsigned int uint;
+#define unsigned int uint
 
 Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center, bool do_keypad) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y) {
 	win = newwin(h, w, x, y);
@@ -14,12 +14,12 @@ Window::~Window() {
 }
 
 
-void Window::pos(uint& x, uint& y) {
+void Window::get_pos(uint& x, uint& y) {
 	x = x;
 	y = y;
 }
 
-void Window::dim(uint& width, uint& height) {
+void Window::get_dim(uint& width, uint& height) {
 	width = w;
 	height = h;
 }
@@ -47,4 +47,8 @@ void Window::printw(char str[]) {
 
 void Window::printw(std::string str) {
 	wprintw(win, str.c_str());
+}
+
+void Window::mvaddch(uint i, uint j, char k) {
+	mvwaddch(win, j, i, k);
 }

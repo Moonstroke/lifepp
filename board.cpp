@@ -22,13 +22,17 @@ Board::~Board() {
 	cells.clear();
 }
 
-void Board::dim(uint &width, uint &height) const {
+void Board::get_dim(uint &width, uint &height) const {
 	width = w;
 	height = h;
 }
 
 bool Board::operator()(uint i, uint j) const {
 	return cells[j][i];
+}
+
+char Board::at(uint i, uint j) const {
+	return (*this)(i, j) ? live : dead;
 }
 
 int Board::neighbors(uint i, uint j) const {
