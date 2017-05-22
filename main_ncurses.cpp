@@ -35,13 +35,13 @@ void init_board(Board* b) {
 	b->toggle(7, 6);
 }
 
-void printw_board(Window *win, Board *brd) {
-	unsigned int w, h;
-	brd->get_dim(w, h);
-	for(int j(0); j < h; ++j)
-		for(int i(0); i < w; ++i)
-			win->mvaddch(i + 1, j + 1, brd->at(i, j));
-}
+// void printw_board(Window *win, Board *brd) {
+// 	unsigned int w, h;
+// 	brd->get_dim(w, h);
+// 	for(int j(0); j < h; ++j)
+// 		for(int i(0); i < w; ++i)
+// 			win->printw(i + 1, j + 1, brd->at(i, j));
+// }
 
 int main(int argc, char *argv[]) {
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 	while(!quit) { // tout le boulot se passe là
 		clear();
 		bwin->draw('|', '-');
-		printw_board(bwin, b);
+		bwin->printw(b);
 		bwin->highlight(cursor_i, cursor_j, 1);
 		bwin->refresh();
 		int ch(bwin->getch());
@@ -97,4 +97,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	end_interface(bwin, b);
+	delete bwin;
+	delete b;
 }

@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include "window.h"
+#include "board.h"
 
 #define unsigned int uint
 
@@ -41,14 +42,14 @@ int Window::getch() {
 	return wgetch(win);
 }
 
-void Window::printw(char str[]) {
+void Window::printw(char str[]) const {
 	wprintw(win, str);
 }
 
-void Window::printw(std::string str) {
+void Window::printw(std::string str) const {
 	wprintw(win, str.c_str());
 }
 
-void Window::mvaddch(uint i, uint j, char k) {
+void Window::printw(const Board *b) const {
 	mvwaddch(win, j, i, k);
 }

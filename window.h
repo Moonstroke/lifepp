@@ -2,7 +2,7 @@
 #define WINDOW_H
 
 #undef getch //tu soules !!
-#undef mvaddch
+//#undef mvaddch
 #include <iostream>
 
 class Window {
@@ -28,11 +28,11 @@ public:
 
 	int getch();
 
-	void mvaddch(unsigned int, unsigned int, char);
+	//void mvaddch(unsigned int, unsigned int, char);
 
-	void printw(char[]);
-	void printw(std::string);
-
+	void printw(char[]) const;
+	void printw(std::string const) const;
+	void printw(const Board*) const;
 };
 
 #endif
