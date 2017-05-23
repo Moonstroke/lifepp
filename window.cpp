@@ -51,5 +51,9 @@ void Window::printw(std::string str) const {
 }
 
 void Window::printw(const Board *b) const {
-	mvwaddch(win, j, i, k);
+	uint w, h;
+	b->get_dim(w, h);
+	for(uint j(0); j < h; ++j)
+		for(uint i(0); i < w; ++i)
+			mvwaddch(win, j + 1, i + 1, b->at(i, j));
 }

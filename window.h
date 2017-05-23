@@ -2,8 +2,8 @@
 #define WINDOW_H
 
 #undef getch //tu soules !!
-//#undef mvaddch
 #include <iostream>
+#include "board.h"
 
 class Window {
 private:
@@ -27,8 +27,6 @@ public:
 	void highlight(unsigned int, unsigned int, unsigned int);
 
 	int getch();
-
-	//void mvaddch(unsigned int, unsigned int, char);
 
 	void printw(char[]) const;
 	void printw(std::string const) const;

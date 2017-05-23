@@ -16,12 +16,6 @@ void init_interface() {
 	*/
 }
 
-void end_interface(Window* bwin, Board* b) {
-	endwin();                   // termine curses et nettoie la mémoire
-	delete bwin;
-	delete b;
-}
-
 void init_board(Board* b) {
 	//dessine un + de taille 3x3 :
 	//  @
@@ -50,7 +44,7 @@ int main(int argc, char *argv[]) {
 	/*
 	 * PARAMÈTRES DU PLATEAU
 	 */
-	char livechar('@'), deadchar('.'), wallchar('#');
+	char livechar('@'), deadchar(' '), wallchar('#');
 	unsigned int w(15), h(11);
 
 	Window* bwin = new Window(w, h, COLS, LINES, true, true);
@@ -72,16 +66,16 @@ int main(int argc, char *argv[]) {
 		int ch(bwin->getch());
 		switch(ch) {
 			case KEY_UP:        // Flèches du clavier = déplacer le curseur
-				cursor_j = cursor_j > 0 ? cursor_j - 1 : bwin->h - 1;
+				cursor_j = cursor_j > 0 ? cursor_j - 1 : bwin->h - 3;
 				break;
 			case KEY_DOWN:
-				cursor_j = cursor_j < bwin->h ? cursor_j + 1 : 0;
+				cursor_j = cursor_j < bwin->h - 3 ? cursor_j + 1 : 0;
 				break;
 			case KEY_LEFT:
-				cursor_i = cursor_i > 0 ? cursor_i - 1 : bwin->w - 1;
+				cursor_i = cursor_i > 0 ? cursor_i - 1 : bwin->w - 3;
 				break;
 			case KEY_RIGHT:
-				cursor_i = cursor_i < bwin->w ? cursor_i + 1 : 0;
+				cursor_i = cursor_i < bwin->w - 3 ? cursor_i + 1 : 0;
 				break;
 			case (int)' ':      // espace = inverser la cellule sélectionnée
 				b->toggle(cursor_i, cursor_j);
@@ -96,7 +90,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	end_interface(bwin, b);
+	endwin();                   // termine curses et nettoie la mémoire
 	delete bwin;
 	delete b;
 }
