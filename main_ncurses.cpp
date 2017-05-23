@@ -44,13 +44,13 @@ int main(int argc, char *argv[]) {
 	/*
 	 * PARAMÈTRES DU PLATEAU
 	 */
-	char livechar('@'), deadchar(' '), wallchar('#');
+	char livechar('@'), deadchar(' ');
 	unsigned int w(15), h(11);
 
 	Window* bwin = new Window(w, h, COLS, LINES, true, true);
-	bwin->draw('|', '-');
+	bwin->draw();
 
-	Board* b = new Board(w, h, livechar, deadchar, wallchar);
+	Board* b = new Board(w, h, livechar, deadchar);
 	init_board(b);
 
 	unsigned int cursor_i(0), cursor_j(0);

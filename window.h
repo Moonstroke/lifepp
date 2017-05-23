@@ -2,6 +2,8 @@
 #define WINDOW_H
 
 #undef getch //tu soules !!
+#undef mvprintw
+
 #include <iostream>
 #include "board.h"
 
@@ -28,8 +30,7 @@ public:
 
 	int getch();
 
-	void printw(char[]) const;
-	void printw(std::string const) const;
+	void mvprintw(const std::string, uint, uint) const;
 	void printw(const Board*) const;
 };
 

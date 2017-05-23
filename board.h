@@ -6,18 +6,20 @@
 
 class Board {
 private:
-	std::vector<std::vector<bool>> cells;
+	std::vector<std::vector<bool>> *cells;
 	unsigned int h, w;
 	char live, dead, wall;
 
 public:
-	Board(unsigned int, unsigned int, char, char, char);
+	Board(unsigned int, unsigned int, char, char);
+	Board(const Board&);
 
 	~Board();
 
 	void get_dim(unsigned int&, unsigned int&) const;
 
 	bool operator()(unsigned int, unsigned int) const;
+	bool& operator()(unsigned int, unsigned int);
 
 	char at(uint i, uint j) const;
 
@@ -29,7 +31,7 @@ public:
 
 	void nextgen();
 
-	friend std::ostream& operator<<(std::ostream&, const Board&);
+	friend std::ostream& operator<<(std::ostream&, const Board*);
 
 	std::string tostring() const;
 };

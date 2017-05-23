@@ -14,7 +14,6 @@ Window::~Window() {
 	win = nullptr;
 }
 
-
 void Window::get_pos(uint& x, uint& y) {
 	x = x;
 	y = y;
@@ -42,12 +41,8 @@ int Window::getch() {
 	return wgetch(win);
 }
 
-void Window::printw(char str[]) const {
-	wprintw(win, str);
-}
-
-void Window::printw(std::string str) const {
-	wprintw(win, str.c_str());
+void Window::mvprintw(const std::string str, uint i, uint j) const {
+	mvwprintw(win, j, i, "%s", str.c_str());
 }
 
 void Window::printw(const Board *b) const {
