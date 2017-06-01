@@ -10,10 +10,13 @@ private:
 	unsigned int h, w;
 	char live, dead, wall;
 
+	void del();
+
 public:
 	Board(unsigned int, unsigned int, char, char);
 	Board(const Board&);
 
+	Board& operator=(const Board&);
 	~Board();
 
 	void get_dim(unsigned int&, unsigned int&) const;

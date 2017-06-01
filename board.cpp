@@ -2,9 +2,25 @@
 
 #define unsigned int uint;
 
-Board::Board(uint width, uint height, char livechar, char deadchar) : w(width), h(height), live(livechar), dead(deadchar), cells(new std::vector<std::vector<bool>>(height, std::vector<bool>(width, false))) {}
+
+using std::vector;
+using std::ostream;
+using std::string;
+using std::endl;
+using std::cerr;
+
+Board::Board(uint width, uint height, char livechar, char deadchar) : w(width), h(height), live(livechar), dead(deadchar), cells(new vector<vector<bool>>(height, vector<bool>(width, false))) {}
 
 Board::Board(const Board& b) : w(b.w), h(b.h), live(b.live), dead(b.dead), cells(b.cells) {}
+
+Board& Board::operator=(const Board &b) {
+	w(b.h);
+	h(b.h);
+	live(b.live);
+	dead(b.dead);
+	delete cells;
+	cells(b.cells);
+}
 
 Board::~Board() {
 	delete cells;
@@ -60,18 +76,18 @@ void Board::nextgen() {
 	this = new Board(&&next);
 }
 
-std::ostream& operator<<(std::ostream& out, const Board *b) {
+ostream& operator<<(ostream& out, const Board *b) {
 	for(uint j(0); j < b->h; ++j) {
 		for(uint i(0); i < b->w; ++i)
 			out << ((*b)(i, j) ? b->live : b->dead);
-		out << std::endl;
+		out << endl;
 	}
 	return out;
 }
 
-std::string Board::tostring() const {
-	std::string res;
-	// std::string res(width + 2, wallchar);
+string Board::tostring() const {
+	string res;
+	// string res(width + 2, wallchar);
 	// res += '\n';
 	for(uint j(0); j < h; ++j) {
 		// res += wallchar;
@@ -80,7 +96,7 @@ std::string Board::tostring() const {
 		// res += wallchar;
 		res += '\n';
 	}
-	// res += std::string(width + 2, wallchar);
-	std::cerr << res;
+	// res += string(width + 2, wallchar);
+	cerr << res;
 	return res;
 }

@@ -4,14 +4,30 @@
 
 #define unsigned int uint
 
-Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center, bool do_keypad) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y) {
-	win = newwin(h, w, x, y);
+Window::Window(uint inner_width, uint inner_height, uint xpos, uint ypos, bool center, bool do_keypad) : w(inner_width + 2), h(inner_height + 2), x(center ? (x - w) / 2 : x), y(center ? (y - h) / 2 : y), win(newwin(h, w, x, y)) {
 	keypad(win, do_keypad);
 }
 
+Window::del() {
+	delwin(win); //à vérifier
+	delete win;
+}
+
+Window::Window(const Window &window) : w(window.w), h(window.h), x(window.x), y(window.y), win(dupwin(window.wiw)) {}
+
 Window::~Window() {
 	wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '); // effacer la bordure de la fenêtre
+	del();
 	win = nullptr;
+}
+
+Window& Window::operator=(const Window &window) {
+	w(window.w);
+	h(window.h);
+	x(window.x);
+	y(window.y);
+	del();
+	win(dupwin(window.wiw));
 }
 
 void Window::get_pos(uint& x, uint& y) {

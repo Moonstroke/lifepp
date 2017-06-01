@@ -13,10 +13,15 @@ private:
 	unsigned int x, y;
 	WINDOW* win;
 
+	void del();
+	
 public:
 	unsigned int w, h;
 
 	Window(unsigned int, unsigned int, unsigned int, unsigned int, bool = false, bool = false);
+	Window(const Window&);
+
+	Window& operator=(const Window&);
 
 	~Window();
 
